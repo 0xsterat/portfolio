@@ -10,6 +10,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Newsletter", href: "/newsletter" },
 ];
 
 export const FOOTER_LINKS: NavLink[] = NAV_LINKS;
