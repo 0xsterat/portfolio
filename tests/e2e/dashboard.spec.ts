@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 test.describe("dashboard slice (issue #4)", () => {
   test("Dashboard shows 4 Metric cards with value, unit, category, source, timestamp and trend charts", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/dashboard");
     await expect(page).toHaveTitle(/Dashboard/);
@@ -41,11 +38,7 @@ test.describe("dashboard slice (issue #4)", () => {
 
   test("Dashboard is usable on mobile widths", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/dashboard");
     const cards = page.getByTestId("metric-card");

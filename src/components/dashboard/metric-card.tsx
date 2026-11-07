@@ -1,4 +1,5 @@
-import type { Metric } from "@/lib/content";
+import type { Metric } from "@/lib/metrics";
+import type { MetricTrend } from "@/lib/dashboard";
 import {
   formatMetricTimestamp,
   formatMetricValue,
@@ -7,7 +8,7 @@ import {
 } from "@/lib/dashboard";
 import { MetricChart } from "./metric-chart";
 
-const TREND_ICON: Record<string, string> = {
+const TREND_ICON: Record<MetricTrend, string> = {
   rising: "▲",
   falling: "▼",
   flat: "■",
@@ -37,7 +38,7 @@ export function MetricCard({ metric }: { metric: Metric }) {
           aria-label={`Trend: ${trend}`}
           className="text-xs font-medium text-accent dark:text-accent-light"
         >
-          {TREND_ICON[trend]} <span className="capitalise">{trend}</span>
+          {TREND_ICON[trend]} <span className="capitalize">{trend}</span>
         </span>
       </div>
 

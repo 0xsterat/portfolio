@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProjectBySlug, loadProjects } from "@/lib/content";
-import { getSiteUrl, site } from "@/lib/site";
+import { getProjectBySlug, loadProjects } from "@/lib/projects";
+import { buildMetadata } from "@/lib/metadata";
+import { getSiteUrl } from "@/lib/site";
+import { formatDate } from "@/lib/date";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -14,23 +16,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return { title: "Project not found" };
-  const url = `${getSiteUrl()}/projects/${project.slug}`;
-  return {
+  return buildMetadata({
     title: project.title,
     description: project.description,
-    alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: {
-      title: `${project.title} | ${site.name}`,
-      description: project.description,
-      url,
-      type: "website",
-    },
-    twitter: {
-      card: "summary",
-      title: `${project.title} | ${site.name}`,
-      description: project.description,
-    },
-  };
+    path: `/projects/${project.slug}`,
+  });
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
@@ -38,10 +28,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
-  const created = new Date(String(project.createdAt));
-  const createdLabel = Number.isNaN(created.getTime())
-    ? String(project.createdAt)
-    : created.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const createdLabel = formatDate(String(project.createdAt));
 
   const jsonLd = {
     "@context": "https://schema.org",

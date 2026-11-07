@@ -1,30 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { BlogPostCard } from "@/components/blog-post-card";
 import { loadBlogPosts } from "@/lib/content";
+import { buildMetadata } from "@/lib/metadata";
 import { getSiteUrl, persona, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: `${persona.name} — Home`,
   description: site.description,
-  alternates: {
-    canonical: "/",
-    types: {
-      "application/rss+xml": `${getSiteUrl()}/feed.xml`,
-    },
-  },
-  openGraph: {
-    title: `${persona.name} — ${site.name}`,
-    description: site.description,
-    url: getSiteUrl(),
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `${persona.name} — ${site.name}`,
-    description: site.description,
-  },
-};
+  path: "/",
+  ogTitle: `${persona.name} — ${site.name}`,
+  includeRss: true,
+});
 
 export default function HomePage() {
   const recentPosts = loadBlogPosts().slice(0, 5);

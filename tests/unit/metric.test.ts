@@ -4,6 +4,7 @@ import {
   toChartData,
   formatMetricValue,
   getMetricTrend,
+  formatMetricTimestamp,
 } from "@/lib/dashboard";
 
 /**
@@ -142,5 +143,20 @@ describe("Metric history", () => {
       ],
     };
     expect(getMetricTrend(falling)).toBe("falling");
+  });
+
+  it("shows the full Metric timestamp including time-of-day (not date-only)", () => {
+    const formatted = formatMetricTimestamp("2026-11-01T14:30:00.000Z");
+    expect(formatted).toContain("November");
+    expect(formatted).toContain("2026");
+    // Time-of-day must be visible: 14:30 UTC is 2:30 PM in en-US.
+    expect(formatted).toMatch(/2:30/);
+    expect(formatted).not.toBe("2026-11-01");
+  });
+
+  it("formats fractional Metric Values without float noise", () => {
+    // 0.1 + 0.2 float noise must not leak into the displayed value.
+    expect(formatMetricValue(0.1 + 0.2, "kg")).toBe("0.3 kg");
+    expect(formatMetricValue(5.0, "posts")).toBe("5 posts");
   });
 });

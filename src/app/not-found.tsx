@@ -1,24 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { getSiteUrl, site } from "@/lib/site";
+import { buildMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Not Found",
   description: "This page does not exist. Browse Blog Posts, Dashboard, Projects, Newsletter Issues, or About.",
-  alternates: { canonical: "/404" },
-  openGraph: {
-    title: `Not Found | ${site.name}`,
-    description: "This page does not exist on Placeholder Portfolio.",
-    url: `${getSiteUrl()}/404`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `Not Found | ${site.name}`,
-    description: "This page does not exist on Placeholder Portfolio.",
-  },
+  ogDescription: "This page does not exist on Placeholder Portfolio.",
+  path: "/404",
   robots: { index: false, follow: false },
-};
+});
 
 export default function NotFound() {
   return (

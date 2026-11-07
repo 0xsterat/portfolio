@@ -1,24 +1,13 @@
-import type { Metadata } from "next";
-import { getSiteUrl, persona, site } from "@/lib/site";
+import { buildMetadata } from "@/lib/metadata";
+import { getSiteUrl, persona } from "@/lib/site";
 
 const description = `About ${persona.name} — ${persona.role}`;
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "About",
   description,
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: `About | ${site.name}`,
-    description,
-    url: `${getSiteUrl()}/about`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `About | ${site.name}`,
-    description,
-  },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   const jsonLd = {
