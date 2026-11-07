@@ -2,12 +2,38 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
+import { formatDate } from "./date";
+import { loadMetrics } from "./metrics";
+import { loadProjects } from "./projects";
+import { loadNewsletterIssues } from "./newsletter";
 
 /**
- * Content seam — Placeholder Blog Post / Metric / Project / Newsletter Issue
- * schemas + loaders. Vocabulary follows GLOSSARY.md; all sample content is
- * independently written Placeholder content (ADR-0002).
+ * Content seam — Blog Post / Tag schemas + loaders (slice #3).
+ * Metric / Project / Newsletter Issue slices live in their own focused
+ * modules (src/lib/metrics.ts, src/lib/projects.ts, src/lib/newsletter.ts)
+ * and are re-exported here so existing imports from "@/lib/content" keep
+ * working (finding 4). Vocabulary follows GLOSSARY.md; all sample content
+ * is independently written Placeholder content (ADR-0002).
  */
+
+/**
+ * Backward-compat re-exports (finding 4). Tests and pages that import
+ * from "@/lib/content" continue to resolve; new code should import from
+ * the focused modules directly.
+ */
+export { MetricSchema, parseMetric, loadMetrics } from "./metrics";
+export type { Metric } from "./metrics";
+export { ProjectStatus, ProjectSchema, parseProject, loadProjects, getProjectBySlug } from "./projects";
+export type { Project } from "./projects";
+export {
+  NewsletterIssueSchema,
+  parseNewsletterIssue,
+  loadNewsletterIssues,
+} from "./newsletter";
+export type { NewsletterIssue } from "./newsletter";
+
+// Re-export shared date helpers for callers already importing from here.
+export { formatDate, formatDateShort, formatDateTime } from "./date";
 
 // --- Blog Post ---
 
@@ -32,93 +58,7 @@ export function parseBlogPost(input: unknown) {
   return BlogPostSchema.parse(input);
 }
 
-// --- Metric ---
-
-export const MetricSchema = z.object({
-  name: z.string().min(1, "Metric name is required"),
-  value: z.number().nonnegative("Metric value must be non-negative"),
-  unit: z.string().min(1, "Metric unit is required"),
-  category: z.string().min(1, "Metric category is required"),
-  source: z.string().min(1, "Metric source is required"),
-  timestamp: z.string().refine(
-    (v) => !Number.isNaN(Date.parse(v)),
-    "Metric timestamp must be a valid date",
-  ),
-  historicalValues: z
-    .array(
-      z.object({
-        value: z.number().nonnegative("Metric historical value must be non-negative"),
-        timestamp: z.string().refine(
-          (v) => !Number.isNaN(Date.parse(v)),
-          "Metric historical timestamp must be a valid date",
-        ),
-      }),
-    )
-    .min(1, "Metric needs at least one historical value"),
-});
-
-export type Metric = z.infer<typeof MetricSchema>;
-
-export function parseMetric(input: unknown) {
-  return MetricSchema.parse(input);
-}
-
-// --- Project ---
-
-const ProjectStatus = z.enum([
-  "active",
-  "maintenance",
-  "archived",
-  "idea",
-  "completed",
-]);
-
-export const ProjectSchema = z.object({
-  title: z.string().min(1, "Project title is required"),
-  slug: z.string().min(1, "Project slug is required"),
-  description: z.string().min(1, "Project description is required"),
-  status: ProjectStatus,
-  technologies: z.array(z.string().min(1)).min(1, "Project needs technologies"),
-  image: z.string().optional(),
-  githubUrl: z.string().url().optional(),
-  demoUrl: z.string().url().optional(),
-  createdAt: z.string().refine(
-    (v) => !Number.isNaN(Date.parse(v)),
-    "Project createdAt must be a valid date",
-  ),
-});
-
-export type Project = z.infer<typeof ProjectSchema>;
-
-export function parseProject(input: unknown) {
-  return ProjectSchema.parse(input);
-}
-
-// --- Newsletter Issue ---
-
-export const NewsletterIssueSchema = z.object({
-  title: z.string().min(1, "Newsletter Issue title is required"),
-  date: z
-    .string()
-    .min(1)
-    .refine((v) => !Number.isNaN(Date.parse(v)), "Newsletter Issue date must be a valid date"),
-  description: z.string().min(1, "Newsletter Issue description is required"),
-  url: z.string().url("Newsletter Issue url must be a valid URL"),
-});
-
-export type NewsletterIssue = z.infer<typeof NewsletterIssueSchema>;
-
-export function parseNewsletterIssue(input: unknown) {
-  return NewsletterIssueSchema.parse(input);
-}
-
-// --- Loaders ---
-
-function readJson<T>(relativePath: string): T {
-  const filePath = path.join(process.cwd(), "src", relativePath);
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw) as T;
-}
+// --- Blog Loaders ---
 
 export function loadBlogPosts(): BlogPost[] {
   const dir = path.join(process.cwd(), "src", "content", "blog");
@@ -178,44 +118,11 @@ export function estimateReadingTime(content: string): number {
 }
 
 /**
- * Display-ready Blog Post date (e.g. "October 24, 2026"). Uses UTC so
- * SSR and client hydration agree on the rendered date.
+ * Display-ready Blog Post date (e.g. "October 24, 2026").
+ * Delegates to the shared helper in src/lib/date.ts (finding 1).
  */
 export function formatBlogDate(date: string): string {
-  const parsed = new Date(String(date));
-  if (Number.isNaN(parsed.getTime())) return String(date);
-  return parsed.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
-export function loadMetrics(): Metric[] {
-  const raw = readJson<unknown>("data/metrics.json");
-  const list = Array.isArray(raw) ? raw : [raw];
-  return list.map((m) => parseMetric(m));
-}
-
-export function loadProjects(): Project[] {
-  const raw = readJson<unknown>("data/projects.json");
-  const list = Array.isArray(raw) ? raw : [raw];
-  return list.map((p) => parseProject(p));
-}
-
-export function getProjectBySlug(slug: string): Project | undefined {
-  return loadProjects().find((p) => p.slug === slug);
-}
-
-export function loadNewsletterIssues(): NewsletterIssue[] {
-  const raw = readJson<unknown>("data/newsletter.json");
-  const list = Array.isArray(raw) ? raw : [raw];
-  return list
-    .map((i) => parseNewsletterIssue(i))
-    .sort(
-      (a, b) => new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime(),
-    );
+  return formatDate(date);
 }
 
 export function validateAllContent() {

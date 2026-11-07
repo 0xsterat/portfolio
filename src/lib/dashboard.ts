@@ -1,4 +1,5 @@
-import type { Metric } from "@/lib/content";
+import type { Metric } from "@/lib/metrics";
+import { formatDateTime } from "@/lib/date";
 
 export type ChartPoint = {
   /** Original ISO timestamp string for tooltip/label formatting. */
@@ -27,7 +28,11 @@ export function toChartData(metric: Pick<Metric, "historicalValues">): ChartPoin
 }
 
 export function formatMetricValue(value: number, unit: string): string {
-  const trimmed = Number.isInteger(value) ? String(value) : String(value);
+  // Round fractional values to 2dp to hide float noise (e.g. 0.1 + 0.2),
+  // while integers stay whole. Trailing-zero trim via Number().
+  const trimmed = Number.isInteger(value)
+    ? String(value)
+    : String(Number(value.toFixed(2)));
   return unit === "%" ? `${trimmed}%` : `${trimmed} ${unit}`;
 }
 
@@ -44,7 +49,5 @@ export function getMetricTrend(
 }
 
 export function formatMetricTimestamp(timestamp: string): string {
-  const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) return timestamp;
-  return date.toISOString().slice(0, 10);
+  return formatDateTime(timestamp);
 }

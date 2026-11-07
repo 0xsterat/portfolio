@@ -58,6 +58,13 @@ describe("Projects loading and validation", () => {
     expect(withDemo.length).toBeGreaterThanOrEqual(1);
   });
 
+  it("every Project has a demoUrl so GitHub + demo links exist (spec story 22)", () => {
+    const projects = loadProjects();
+    for (const p of projects) {
+      expect(p.demoUrl, `${p.slug} has demoUrl`).toMatch(/^https?:\/\//);
+    }
+  });
+
   it("rejects a Project with an unknown status", () => {
     expect(() =>
       parseProject({

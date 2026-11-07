@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 /**
  * Integration gate (ticket #7) — whole-site smoke.
@@ -25,11 +26,7 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
   test("every public route loads with no console errors and has SEO metadata", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     for (const route of ROUTES) {
       const res = await page.goto(route);
@@ -80,11 +77,7 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
   test("Home is live: shows Persona, 5 recent Blog Posts, and links to every section", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/");
     await expect(page).toHaveTitle(/Placeholder/);
@@ -157,11 +150,7 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
   test("full journey: Home → Blog → Blog Post → Dashboard → Projects → Newsletter → Substack", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     // Home → Blog
     await page.goto("/");

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 const KNOWN_PROJECTS = [
   "placeholder-dashboard",
@@ -10,11 +11,7 @@ const KNOWN_PROJECTS = [
 
 test.describe("Projects slice (issue #5)", () => {
   test("Projects index lists 5 Placeholder Projects as cards", async ({ page }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/projects");
     await expect(page).toHaveTitle(/Projects/);
@@ -65,11 +62,7 @@ test.describe("Projects slice (issue #5)", () => {
   test("Project detail page shows title, description, status, tech, external links", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/projects/placeholder-dashboard");
     await expect(page).toHaveTitle(/Placeholder Dashboard/);

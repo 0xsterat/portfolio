@@ -46,6 +46,7 @@
     "status": "idea",
     "technologies": ["Node.js", "TypeScript"],
     "githubUrl": "https://github.com/",
+    "demoUrl": "https://example.com/",
     "createdAt": "2026-10-01"
   }
 ]

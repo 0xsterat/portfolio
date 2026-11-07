@@ -1,51 +1,31 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { BlogPostCard, TagPill } from "@/components/blog-post-card";
 import { getAllTags, loadBlogPosts } from "@/lib/content";
+import { buildMetadata, buildItemListJsonLd } from "@/lib/metadata";
 import { getSiteUrl, persona, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Blog",
   description: `Engineering Blog Posts by ${persona.name} — Placeholder content.`,
-  alternates: {
-    canonical: "/blog",
-    types: {
-      "application/rss+xml": `${getSiteUrl()}/feed.xml`,
-    },
-  },
-  openGraph: {
-    title: `Blog | ${site.name}`,
-    description: site.description,
-    url: `${getSiteUrl()}/blog`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `Blog | ${site.name}`,
-    description: site.description,
-  },
-};
+  ogDescription: site.description,
+  path: "/blog",
+  includeRss: true,
+});
 
 export default function BlogIndexPage() {
   const posts = loadBlogPosts();
   const tags = getAllTags();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+  const jsonLd = buildItemListJsonLd({
     name: "Blog Posts",
     url: `${getSiteUrl()}/blog`,
-    itemListElement: posts.map((post, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "BlogPosting",
-        headline: post.title,
-        description: post.summary,
-        url: `${getSiteUrl()}/blog/${post.slug}`,
-        datePublished: String(post.date),
-      },
+    items: posts.map((post) => ({
+      type: "BlogPosting",
+      headline: post.title,
+      description: post.summary,
+      url: `${getSiteUrl()}/blog/${post.slug}`,
+      datePublished: String(post.date),
     })),
-  };
+  });
 
   return (
     <div>

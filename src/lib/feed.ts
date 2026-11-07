@@ -16,15 +16,10 @@ function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-export function buildRssFeed(
-  posts: BlogPost[],
-  siteUrl: string,
-  channelTitle?: string,
-  channelDescription?: string,
-): string {
+export function buildRssFeed(posts: BlogPost[], siteUrl: string): string {
   const base = siteUrl.replace(/\/$/, "");
-  const title = channelTitle ?? site.name;
-  const description = channelDescription ?? site.description;
+  const title = site.name;
+  const description = site.description;
   const sorted = [...posts].sort(
     (a, b) => new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime(),
   );

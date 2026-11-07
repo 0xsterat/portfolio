@@ -18,6 +18,8 @@ _Avoid_: Category
 A single measured value with a unit, source, timestamp, and history.
 _Avoid_: Stat
 
+Note: Metric `category` is a spec field (story 15 / spec #1) that groups Metrics by category — it is distinct from the Glossary `Tag` grouping above, which applies to Blog Posts.
+
 **Dashboard**:
 The public page that presents Metrics as cards and historical trends.
 _Avoid_: Stats page

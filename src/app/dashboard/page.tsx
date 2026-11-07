@@ -1,46 +1,29 @@
-import type { Metadata } from "next";
 import { MetricCard } from "@/components/dashboard/metric-card";
-import { loadMetrics } from "@/lib/content";
-import { getSiteUrl, site } from "@/lib/site";
+import { loadMetrics } from "@/lib/metrics";
+import { buildMetadata, buildItemListJsonLd } from "@/lib/metadata";
+import { getSiteUrl } from "@/lib/site";
 
 const description =
   "Public Metrics Dashboard with Placeholder Metrics, values, units, categories, sources, and historical trends.";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Dashboard",
   description,
-  alternates: { canonical: "/dashboard" },
-  openGraph: {
-    title: `Dashboard | ${site.name}`,
-    description,
-    url: `${getSiteUrl()}/dashboard`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `Dashboard | ${site.name}`,
-    description,
-  },
-};
+  path: "/dashboard",
+});
 
 export default function DashboardPage() {
   const metrics = loadMetrics();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+  const jsonLd = buildItemListJsonLd({
     name: "Public Metrics Dashboard",
     url: `${getSiteUrl()}/dashboard`,
-    itemListElement: metrics.map((metric, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Thing",
-        name: metric.name,
-        value: metric.value,
-        ...(metric.unit ? { unitText: metric.unit } : {}),
-      },
+    items: metrics.map((metric) => ({
+      type: "Thing",
+      name: metric.name,
+      value: metric.value,
+      ...(metric.unit ? { unitText: metric.unit } : {}),
     })),
-  };
+  });
 
   return (
     <div>

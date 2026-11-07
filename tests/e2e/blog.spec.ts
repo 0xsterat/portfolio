@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 /**
  * Blog slice (ticket #3) — route seam smoke.
@@ -9,11 +10,7 @@ test.describe("Blog slice", () => {
   test("Blog index lists 5 Placeholder Blog Posts sorted by date", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/blog");
     await expect(page).toHaveTitle(/Blog/);
@@ -45,11 +42,7 @@ test.describe("Blog slice", () => {
   test("Blog Post reader shows title, date, reading time, and highlighted code", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/blog/getting-started-with-static-content");
     await expect(page).toHaveTitle(/Getting started with static content/);

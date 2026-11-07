@@ -3,48 +3,33 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TagPill } from "@/components/blog-post-card";
 import { estimateReadingTime, formatBlogDate, getBlogPostBySlug, loadBlogPosts } from "@/lib/content";
+import { buildMetadata } from "@/lib/metadata";
 import { renderMarkdownToHtml } from "@/lib/markdown";
 import { getSiteUrl, persona } from "@/lib/site";
+
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return loadBlogPosts().map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) return { title: "Blog Post not found" };
-  const url = `${getSiteUrl()}/blog/${post.slug}`;
-  return {
+  return buildMetadata({
     title: post.title,
     description: post.summary,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: {
-      title: post.title,
-      description: post.summary,
-      url,
-      type: "article",
-      publishedTime: String(post.date),
-      authors: [persona.name],
-      tags: [...post.tags],
-    },
-    twitter: {
-      card: "summary",
-      title: post.title,
-      description: post.summary,
-    },
-  };
+    path: `/blog/${post.slug}`,
+    ogTitle: post.title,
+    type: "article",
+    publishedTime: String(post.date),
+    authors: [persona.name],
+    tags: [...post.tags],
+  });
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) notFound();
@@ -99,7 +84,7 @@ export default async function BlogPostPage({
       />
       <footer className="mt-10 border-t border-neutral-200 pt-6 dark:border-neutral-800">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          More Badge Posts in the{" "}
+          More Blog Posts in the{" "}
           <Link href="/blog" className="text-accent hover:underline">
             Blog index
           </Link>{" "}

@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 test.describe("newsletter — issue #6", () => {
   test("Newsletter index lists 4 Placeholder Newsletter Issues with external Substack links", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/newsletter");
 
@@ -30,10 +27,14 @@ test.describe("newsletter — issue #6", () => {
     }
 
     // External-link indicator visible; links open in a new tab with noopener.
+    // Honest label (finding 10): button says "Read", not "Read on Substack",
+    // while URLs are still placeholder example.com (ADR-0002).
     const links = page.getByTestId("newsletter-external-link");
     await expect(links).toHaveCount(4);
     for (const link of await links.all()) {
       await expect(link).toBeVisible();
+      await expect(link).toContainText(/Read/);
+      await expect(link).not.toContainText(/Substack/);
       expect(await link.getAttribute("target")).toBe("_blank");
       expect(await link.getAttribute("rel")).toContain("noopener");
       const href = await link.getAttribute("href");

@@ -3,65 +3,44 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogPostCard, TagPill } from "@/components/blog-post-card";
 import { getAllTags, getBlogPostsByTag } from "@/lib/content";
+import { buildMetadata, buildItemListJsonLd } from "@/lib/metadata";
 import { getSiteUrl } from "@/lib/site";
+
+type Props = { params: Promise<{ tag: string }> };
 
 export function generateStaticParams() {
   return getAllTags().map((tag) => ({ tag }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ tag: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
   const decoded = decodeURIComponent(tag);
   const posts = getBlogPostsByTag(decoded);
   if (posts.length === 0) return { title: "Tag not found" };
-  const url = `${getSiteUrl()}/tags/${encodeURIComponent(decoded)}`;
-  return {
+  const description = `${posts.length} Placeholder Blog Post${posts.length === 1 ? "" : "s"} with the Tag “${decoded}”.`;
+  return buildMetadata({
     title: `Blog Posts tagged ${decoded}`,
-    description: `${posts.length} Placeholder Blog Post${posts.length === 1 ? "" : "s"} with the Tag “${decoded}”.`,
-    alternates: { canonical: `/tags/${encodeURIComponent(decoded)}` },
-    openGraph: {
-      title: `Blog Posts tagged ${decoded}`,
-      description: `${posts.length} Placeholder Blog Post${posts.length === 1 ? "" : "s"} with the Tag “${decoded}”.`,
-      url,
-      type: "website",
-    },
-    twitter: {
-      card: "summary",
-      title: `Blog Posts tagged ${decoded}`,
-      description: `${posts.length} Placeholder Blog Post${posts.length === 1 ? "" : "s"} with the Tag “${decoded}”.`,
-    },
-  };
+    description,
+    path: `/tags/${encodeURIComponent(decoded)}`,
+    ogTitle: `Blog Posts tagged ${decoded}`,
+  });
 }
 
-export default async function TagPage({
-  params,
-}: {
-  params: Promise<{ tag: string }>;
-}) {
+export default async function TagPage({ params }: Props) {
   const { tag } = await params;
   const decoded = decodeURIComponent(tag);
   const posts = getBlogPostsByTag(decoded);
   if (posts.length === 0) notFound();
   const allTags = getAllTags();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+  const jsonLd = buildItemListJsonLd({
     name: `Blog Posts tagged ${decoded}`,
     url: `${getSiteUrl()}/tags/${encodeURIComponent(decoded)}`,
-    itemListElement: posts.map((post, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "BlogPosting",
-        headline: post.title,
-        url: `${getSiteUrl()}/blog/${post.slug}`,
-      },
+    items: posts.map((post) => ({
+      type: "BlogPosting",
+      headline: post.title,
+      url: `${getSiteUrl()}/blog/${post.slug}`,
     })),
-  };
+  });
 
   return (
     <div>

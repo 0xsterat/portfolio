@@ -1,52 +1,30 @@
-import type { Metadata } from "next";
-import { loadNewsletterIssues } from "@/lib/content";
-import { getSiteUrl, site } from "@/lib/site";
+import { loadNewsletterIssues } from "@/lib/newsletter";
+import { formatDateShort } from "@/lib/date";
+import { buildMetadata, buildItemListJsonLd } from "@/lib/metadata";
+import { getSiteUrl } from "@/lib/site";
 
 const description =
   "Placeholder Newsletter Issues from the Placeholder Persona, linking out to Substack.";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Newsletter",
   description,
-  alternates: { canonical: "/newsletter" },
-  openGraph: {
-    title: `Newsletter | ${site.name}`,
-    description,
-    url: `${getSiteUrl()}/newsletter`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: `Newsletter | ${site.name}`,
-    description,
-  },
-};
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toISOString().slice(0, 10);
-}
+  path: "/newsletter",
+});
 
 export default function NewsletterPage() {
   const issues = loadNewsletterIssues();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+  const jsonLd = buildItemListJsonLd({
     name: "Newsletter Issues",
     url: `${getSiteUrl()}/newsletter`,
-    itemListElement: issues.map((issue, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Article",
-        headline: issue.title,
-        description: issue.description,
-        url: issue.url,
-        datePublished: String(issue.date),
-      },
+    items: issues.map((issue) => ({
+      type: "Article",
+      headline: issue.title,
+      description: issue.description,
+      url: issue.url,
+      datePublished: String(issue.date),
     })),
-  };
+  });
 
   return (
     <div>
@@ -72,7 +50,7 @@ export default function NewsletterPage() {
                 dateTime={issue.date}
                 className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400"
               >
-                {formatDate(issue.date)}
+                {formatDateShort(issue.date)}
               </time>
               <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
                 {issue.description}
@@ -82,10 +60,10 @@ export default function NewsletterPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="newsletter-external-link"
-                aria-label={`Read ${issue.title} on Substack (opens in a new tab)`}
+                aria-label={`Read ${issue.title} (opens in a new tab)`}
                 className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
               >
-                Read on Substack
+                Read
                 <span aria-hidden="true">↗</span>
                 <span className="sr-only">external</span>
               </a>

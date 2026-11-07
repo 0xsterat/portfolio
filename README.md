@@ -75,10 +75,33 @@ complete, full journey works).
 - Metrics: `src/data/metrics.json`
 - Projects: `src/data/projects.json`
 - Newsletter Issues: `src/data/newsletter.json`
-- Schemas + loaders: `src/lib/content.ts` (Zod, validated by `pnpm test`)
+- Schemas + loaders: Blog in `src/lib/content.ts`, Metrics in `src/lib/metrics.ts`, Projects in `src/lib/projects.ts`, Newsletter in `src/lib/newsletter.ts` (Zod, validated by `pnpm test`; `content.ts` re-exports the focused modules for backward compatibility)
 
 Replace Placeholder content with real Blog Posts, Metrics, Projects, and Newsletter
 Issues via these files — no component changes needed.
+
+### Blog content format (supported Markdown only)
+
+The `.mdx` files are authoring containers: frontmatter (title, date, slug,
+tags, summary) plus a Markdown body. Supported: headings, paragraphs, lists,
+GFM tables, and fenced code blocks (```ts etc.) with syntax highlighting
+(`rehype-highlight`). Raw HTML in a post body is escaped to text, never
+rendered as markup.
+
+**Not supported (intentional MVP limitation):** MDX components, JSX
+expressions (`{...}`), imports/exports, and other MDX runtime syntax. The
+pipeline is `remark` (no MDX compiler by design — no full MDX compiler in
+MVP scope). If you add components/expressions they will render as text,
+not components. Write posts as plain Markdown + code blocks.
+
+### Newsletter URLs are placeholder (must swap before real use)
+
+Newsletter Issue `url` fields in `src/data/newsletter.json` are placeholder
+`https://example.com/` links (ADR-0002). The UI button therefore says
+“Read ↗” (honest label — no Substack claim over a placeholder URL). Before
+deploying real content, replace each `url` with the real Substack post URL.
+Project `githubUrl`/`demoUrl` placeholders (`https://github.com/`,
+`https://example.com/`) need the same swap.
 
 ## Deployment
 
