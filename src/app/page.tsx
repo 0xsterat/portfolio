@@ -35,8 +35,7 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold">Sections</h2>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
           Blog Posts, Dashboard of Metrics, Projects, and Newsletter Issues are
-          scaffolded in content and ship in the next slices (#3–#6). Home and About
-          are live now.
+          scaffolded in content. Home, About, and Projects are live.
         </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {[
@@ -50,7 +49,8 @@ export default function HomePage() {
             },
             {
               title: "Projects",
-              body: "5 Placeholder Projects with status and tech stack — coming in #5.",
+              body: "5 Placeholder Projects with status and tech stack.",
+              href: "/projects",
             },
             {
               title: "Newsletter Issues",
@@ -65,6 +65,11 @@ export default function HomePage() {
               <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
                 {card.body}
               </p>
+              {"href" in card && card.href ? (
+                <a href={card.href} className="mt-2 inline-block text-sm text-accent hover:underline">
+                  View Projects →
+                </a>
+              ) : null}
             </article>
           ))}
         </div>

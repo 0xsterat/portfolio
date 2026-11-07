@@ -147,6 +147,10 @@ export function loadProjects(): Project[] {
   return list.map((p) => parseProject(p));
 }
 
+export function getProjectBySlug(slug: string): Project | undefined {
+  return loadProjects().find((p) => p.slug === slug);
+}
+
 export function loadNewsletterIssues(): NewsletterIssue[] {
   const raw = readJson<unknown>("data/newsletter.json");
   const list = Array.isArray(raw) ? raw : [raw];
