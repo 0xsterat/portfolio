@@ -1,0 +1,51 @@
+[
+  {
+    "title": "Placeholder Dashboard",
+    "slug": "placeholder-dashboard",
+    "description": "A Placeholder Project showing a generic Dashboard of Metrics as cards and trends.",
+    "status": "active",
+    "technologies": ["Next.js", "TypeScript", "Recharts"],
+    "githubUrl": "https://github.com/",
+    "demoUrl": "https://example.com/",
+    "createdAt": "2026-08-01"
+  },
+  {
+    "title": "Static Blog Starter",
+    "slug": "static-blog-starter",
+    "description": "A Placeholder Project for publishing Blog Posts as MDX with Tags and RSS.",
+    "status": "maintenance",
+    "technologies": ["Next.js", "MDX"],
+    "githubUrl": "https://github.com/",
+    "demoUrl": "https://example.com/",
+    "createdAt": "2026-07-15"
+  },
+  {
+    "title": "Theme Toggle Experiment",
+    "slug": "theme-toggle-experiment",
+    "description": "A Placeholder Project exploring flash-free light/dark theming with next-themes.",
+    "status": "completed",
+    "technologies": ["next-themes", "Tailwind CSS"],
+    "githubUrl": "https://github.com/",
+    "demoUrl": "https://example.com/",
+    "createdAt": "2026-06-20"
+  },
+  {
+    "title": "Newsletter Index",
+    "slug": "newsletter-index",
+    "description": "A Placeholder Project indexing Newsletter Issues that link out to Substack.",
+    "status": "active",
+    "technologies": ["Next.js", "TypeScript"],
+    "githubUrl": "https://github.com/",
+    "demoUrl": "https://example.com/",
+    "createdAt": "2026-09-01"
+  },
+  {
+    "title": "Reading Notes CLI",
+    "slug": "reading-notes-cli",
+    "description": "A Placeholder Project for keeping local reading notes as plain Markdown files.",
+    "status": "idea",
+    "technologies": ["Node.js", "TypeScript"],
+    "githubUrl": "https://github.com/",
+    "createdAt": "2026-10-01"
+  }
+]

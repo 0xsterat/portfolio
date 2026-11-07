@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Posts Published",
+    "value": 5,
+    "unit": "posts",
+    "category": "writing",
+    "source": "placeholder-local-file",
+    "timestamp": "2026-11-01T00:00:00.000Z",
+    "historicalValues": [
+      { "value": 2, "timestamp": "2026-09-01T00:00:00.000Z" },
+      { "value": 3, "timestamp": "2026-10-01T00:00:00.000Z" },
+      { "value": 5, "timestamp": "2026-11-01T00:00:00.000Z" }
+    ]
+  },
+  {
+    "name": "Projects Shipped",
+    "value": 5,
+    "unit": "projects",
+    "category": "builds",
+    "source": "placeholder-local-file",
+    "timestamp": "2026-11-01T00:00:00.000Z",
+    "historicalValues": [
+      { "value": 3, "timestamp": "2026-09-01T00:00:00.000Z" },
+      { "value": 4, "timestamp": "2026-10-01T00:00:00.000Z" },
+      { "value": 5, "timestamp": "2026-11-01T00:00:00.000Z" }
+    ]
+  },
+  {
+    "name": "Newsletter Issues",
+    "value": 4,
+    "unit": "issues",
+    "category": "writing",
+    "source": "placeholder-local-file",
+    "timestamp": "2026-11-01T00:00:00.000Z",
+    "historicalValues": [
+      { "value": 2, "timestamp": "2026-09-15T00:00:00.000Z" },
+      { "value": 3, "timestamp": "2026-10-15T00:00:00.000Z" },
+      { "value": 4, "timestamp": "2026-11-01T00:00:00.000Z" }
+    ]
+  },
+  {
+    "name": "Uptime (30 days)",
+    "value": 99.9,
+    "unit": "%",
+    "category": "site",
+    "source": "placeholder-local-file",
+    "timestamp": "2026-11-01T00:00:00.000Z",
+    "historicalValues": [
+      { "value": 98.1, "timestamp": "2026-09-01T00:00:00.000Z" },
+      { "value": 99.2, "timestamp": "2026-10-01T00:00:00.000Z" },
+      { "value": 99.9, "timestamp": "2026-11-01T00:00:00.000Z" }
+    ]
+  }
+]

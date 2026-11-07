@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Issue 04 — Static-first thinking",
+    "date": "2026-10-28",
+    "description": "Placeholder Newsletter Issue on why this portfolio ships as static files first.",
+    "url": "https://example.com/newsletter/04-static-first-thinking"
+  },
+  {
+    "title": "Issue 03 — Small tests, big trust",
+    "date": "2026-10-14",
+    "description": "Placeholder Newsletter Issue on testing at the content seam with Vitest.",
+    "url": "https://example.com/newsletter/03-small-tests-big-trust"
+  },
+  {
+    "title": "Issue 02 — Theming without flash",
+    "date": "2026-09-30",
+    "description": "Placeholder Newsletter Issue on flash-free light/dark mode with next-themes.",
+    "url": "https://example.com/newsletter/02-theming-without-flash"
+  },
+  {
+    "title": "Issue 01 — Welcome to the Placeholder site",
+    "date": "2026-09-16",
+    "description": "Placeholder Newsletter Issue introducing the Placeholder Persona and site layout.",
+    "url": "https://example.com/newsletter/01-welcome-to-the-placeholder-site"
+  }
+]
