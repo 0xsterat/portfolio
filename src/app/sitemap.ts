@@ -1,14 +1,17 @@
 import type { MetadataRoute } from "next";
-import { getAllTags, getBlogPostsByTag, loadBlogPosts } from "@/lib/content";
+import {
+  getAllTags,
+  getBlogPostsByTag,
+  loadBlogPosts,
+  loadProjects,
+} from "@/lib/content";
 import { getSiteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = getSiteUrl();
   const now = new Date();
   const posts = loadBlogPosts();
-  const blogLastModified = posts[0]
-    ? new Date(String(posts[0].date))
-    : now;
+  const blogLastModified = posts[0] ? new Date(String(posts[0].date)) : now;
 
   const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${base}/blog/${post.slug}`,
@@ -28,6 +31,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
+  const projectRoutes: MetadataRoute.Sitemap = loadProjects().map((p) => ({
+    url: `${base}/projects/${p.slug}`,
+    lastModified: now,
+  }));
+
   return [
     { url: base, lastModified: now, priority: 1 },
     { url: `${base}/about`, lastModified: now, changeFrequency: "monthly" },
@@ -39,5 +47,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...blogEntries,
     ...tagEntries,
+    { url: `${base}/dashboard`, lastModified: now },
+    { url: `${base}/projects`, lastModified: now },
+    ...projectRoutes,
+    { url: `${base}/newsletter`, lastModified: now },
   ];
 }
