@@ -9,4 +9,13 @@ summary: "How a tiny inline script keeps light/dark mode from flashing on first 
 A theme preference stored client-side only helps if the first paint already knows
 it. An inline script in the document head applies the class before hydration.
 
+```html
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    document.documentElement.classList.toggle("dark", stored !== "light");
+  })();
+</script>
+```
+
 This Blog Post is Placeholder content — swap it for real writing later.

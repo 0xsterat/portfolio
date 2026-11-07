@@ -135,6 +135,63 @@ export function loadBlogPosts(): BlogPost[] {
   );
 }
 
+/**
+ * Blog Post / Tag helpers (ticket #3): pure lookups over the Placeholder
+ * Blog Post files. Loaders return most-recent-first order (loadBlogPosts
+ * sorts descending); Tag matching is case-insensitive so /tags/WEB and
+ * /tags/web resolve to the same Blog Posts.
+ */
+export function getBlogPostBySlug(slug: string): BlogPost | undefined {
+  if (!slug) return undefined;
+  return loadBlogPosts().find((post) => post.slug === slug);
+}
+
+export function getAllTags(): string[] {
+  const seen = new Set<string>();
+  for (const post of loadBlogPosts()) {
+    for (const tag of post.tags) {
+      seen.add(tag.trim());
+    }
+  }
+  return [...seen].sort((a, b) => a.localeCompare(b));
+}
+
+export function getBlogPostsByTag(tag: string): BlogPost[] {
+  const needle = tag.trim().toLowerCase();
+  if (!needle) return [];
+  return loadBlogPosts().filter((post) =>
+    post.tags.some((t) => t.trim().toLowerCase() === needle),
+  );
+}
+
+const WORDS_PER_MINUTE = 200;
+
+/**
+ * Estimated reading time in minutes (200 wpm, 1-minute floor).
+ * Counts words outside fenced code blocks so code-heavy Blog Posts
+ * don't inflate the estimate, but still floors at 1 minute.
+ */
+export function estimateReadingTime(content: string): number {
+  const withoutCode = content.replace(/```[\s\S]*?```/g, " ");
+  const words = withoutCode.split(/\s+/).filter((w) => w.length > 0).length;
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+}
+
+/**
+ * Display-ready Blog Post date (e.g. "October 24, 2026"). Uses UTC so
+ * SSR and client hydration agree on the rendered date.
+ */
+export function formatBlogDate(date: string): string {
+  const parsed = new Date(String(date));
+  if (Number.isNaN(parsed.getTime())) return String(date);
+  return parsed.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 export function loadMetrics(): Metric[] {
   const raw = readJson<unknown>("data/metrics.json");
   const list = Array.isArray(raw) ? raw : [raw];

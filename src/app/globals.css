@@ -17,3 +17,156 @@ html {
 body {
   font-family: Inter, ui-sans-system, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Blog Post prose — hand-rolled (no @tailwindcss/typography) so the reader
+   stays static-first with a narrow prose column (ADR-0005). */
+.blog-prose {
+  line-height: 1.7;
+}
+.blog-prose p {
+  margin: 1em 0;
+}
+.blog-prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 1.6em 0 0.5em;
+}
+.blog-prose h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.4em 0 0.5em;
+}
+.blog-prose ul,
+.blog-prose ol {
+  margin: 1em 0;
+  padding-left: 1.4em;
+  list-style: disc;
+}
+.blog-prose ol {
+  list-style: decimal;
+}
+.blog-prose li {
+  margin: 0.35em 0;
+}
+.blog-prose a {
+  color: var(--accent, #0f766e);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.dark .blog-prose a {
+  color: #2dd4bf;
+}
+.blog-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88em;
+  padding: 0.15em 0.35em;
+  border-radius: 0.375rem;
+  background-color: rgb(0 0 0 / 0.06);
+}
+.dark .blog-prose code {
+  background-color: rgb(255 255 255 / 0.1);
+}
+.blog-prose pre {
+  margin: 1.2em 0;
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  background-color: #fafafa;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.dark .blog-prose pre {
+  border-color: rgb(255 255 255 / 0.12);
+  background-color: #0a0a0a;
+}
+.blog-prose pre code {
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  color: inherit;
+}
+.blog-prose blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 3px solid rgb(0 0 0 / 0.2);
+  color: rgb(0 0 0 / 0.65);
+}
+.dark .blog-prose blockquote {
+  border-color: rgb(255 255 255 / 0.2);
+  color: rgb(255 255 255 / 0.7);
+}
+
+/* rehype-highlight (highlight.js) token colors, light + dark. */
+.blog-prose .hljs-keyword,
+.blog-prose .hljs-selector-tag,
+.blog-prose .hljs-type {
+  color: #7c3aed;
+}
+.blog-prose .hljs-string,
+.blog-prose .hljs-regexp {
+  color: #15803d;
+}
+.blog-prose .hljs-comment,
+.blog-prose .hljs-quote {
+  color: #6b7280;
+  font-style: italic;
+}
+.blog-prose .hljs-number,
+.blog-prose .hljs-literal {
+  color: #b45309;
+}
+.blog-prose .hljs-title,
+.blog-prose .hljs-title.function_,
+.blog-prose .hljs-section {
+  color: #1d4ed8;
+}
+.blog-prose .hljs-attr,
+.blog-prose .hljs-attribute,
+.blog-prose .hljs-variable,
+.blog-prose .hljs-template-variable {
+  color: #0f766e;
+}
+.blog-prose .hljs-name,
+.blog-prose .hljs-tag {
+  color: #be185d;
+}
+.blog-prose .hljs-built_in {
+  color: #0369a1;
+}
+.dark .blog-prose .hljs-keyword,
+.dark .blog-prose .hljs-selector-tag,
+.dark .blog-prose .hljs-type {
+  color: #c4b5fd;
+}
+.dark .blog-prose .hljs-string,
+.dark .blog-prose .hljs-regexp {
+  color: #86efac;
+}
+.dark .blog-prose .hljs-comment,
+.dark .blog-prose .hljs-quote {
+  color: #9ca3af;
+}
+.dark .blog-prose .hljs-number,
+.dark .blog-prose .hljs-literal {
+  color: #fbbf24;
+}
+.dark .blog-prose .hljs-title,
+.dark .blog-prose .hljs-title.function_,
+.dark .blog-prose .hljs-section {
+  color: #93c5fd;
+}
+.dark .blog-prose .hljs-attr,
+.dark .blog-prose .hljs-attribute,
+.dark .blog-prose .hljs-variable,
+.dark .blog-prose .hljs-template-variable {
+  color: #5eead4;
+}
+.dark .blog-prose .hljs-name,
+.dark .blog-prose .hljs-tag {
+  color: #f9a8d4;
+}
+.dark .blog-prose .hljs-built_in {
+  color: #7dd3fc;
+}

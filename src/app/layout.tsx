@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
+  alternates: {
+    types: {
+      "application/rss+xml": `${getSiteUrl()}/feed.xml`,
+    },
+  },
   openGraph: {
     title: persona.name,
     description: site.description,
