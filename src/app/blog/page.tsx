@@ -29,9 +29,30 @@ export const metadata: Metadata = {
 export default function BlogIndexPage() {
   const posts = loadBlogPosts();
   const tags = getAllTags();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Blog Posts",
+    url: `${getSiteUrl()}/blog`,
+    itemListElement: posts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "BlogPosting",
+        headline: post.title,
+        description: post.summary,
+        url: `${getSiteUrl()}/blog/${post.slug}`,
+        datePublished: String(post.date),
+      },
+    })),
+  };
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="text-sm font-medium tracking-wide text-accent dark:text-accent-light">
         Blog
       </p>

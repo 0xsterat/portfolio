@@ -51,9 +51,22 @@ export default async function BlogPostPage({
 
   const html = await renderMarkdownToHtml(post.content);
   const minutes = estimateReadingTime(post.content);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.summary,
+    url: `${getSiteUrl()}/blog/${post.slug}`,
+    datePublished: String(post.date),
+    author: { "@type": "Person", name: persona.name },
+  };
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link
         href="/blog"
         className="text-sm text-accent hover:underline"

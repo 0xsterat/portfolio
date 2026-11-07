@@ -47,9 +47,28 @@ export default async function TagPage({
   const posts = getBlogPostsByTag(decoded);
   if (posts.length === 0) notFound();
   const allTags = getAllTags();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Blog Posts tagged ${decoded}`,
+    url: `${getSiteUrl()}/tags/${encodeURIComponent(decoded)}`,
+    itemListElement: posts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "BlogPosting",
+        headline: post.title,
+        url: `${getSiteUrl()}/blog/${post.slug}`,
+      },
+    })),
+  };
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href="/blog" className="text-sm text-accent hover:underline">
         ← Back to Blog
       </Link>

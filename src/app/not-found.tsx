@@ -1,4 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { getSiteUrl, site } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Not Found",
+  description: "This page does not exist. Browse Blog Posts, Dashboard, Projects, Newsletter Issues, or About.",
+  alternates: { canonical: "/404" },
+  openGraph: {
+    title: `Not Found | ${site.name}`,
+    description: "This page does not exist on Placeholder Portfolio.",
+    url: `${getSiteUrl()}/404`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: `Not Found | ${site.name}`,
+    description: "This page does not exist on Placeholder Portfolio.",
+  },
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
@@ -6,8 +26,8 @@ export default function NotFound() {
       <p className="text-sm font-medium tracking-wide text-accent">404</p>
       <h1 className="mt-2 text-3xl font-bold tracking-tight">This page drifted off the map</h1>
       <p className="mx-auto mt-3 max-w-prose text-neutral-600 dark:text-neutral-400">
-        The URL you followed doesn&apos;t exist here. Try the homepage or About —
-        everything else is coming in the next slices.
+        The URL you followed doesn&apos;t exist here. Try the homepage, Blog
+        Posts, Dashboard, Projects, Newsletter Issues, or About.
       </p>
       <div className="mt-6 flex justify-center gap-3">
         <Link
