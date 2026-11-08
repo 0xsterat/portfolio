@@ -1,11 +1,31 @@
-# Personal Website Reconstruction & Rebuild
+# Personal Portfolio — static-first (integration gate #7)
 
-## Setup (Issue #2 — Bootstrap)
+A deployable static-first portfolio (Next.js App Router + TypeScript) where Home,
+About, Blog Posts, Dashboard, Projects, and Newsletter Issues work together —
+production build passes, all routes smoke-tested with no console errors, and
+per-page SEO metadata + JSON-LD + Open Graph/Twitter + sitemap/RSS are complete.
+All Blog Posts, Metrics, Projects, Newsletter Issues, and the Persona are
+independently written Placeholder content (ADR-0002), not copied from any
+reference site. Static-first, no backend (ADR-0003). Live routes:
 
-A Next.js App Router + TypeScript portfolio shell with Tailwind, light/dark themes,
-header/footer + mobile drawer, Home/About/404, and Placeholder content scaffolding
-(Blog Post, Metric, Project, Newsletter Issue — all independently written Placeholder
-content, not copied from the reference site).
+- `/` — Home: Placeholder Persona, 5 most recent Blog Posts, live cards for all sections
+- `/about` — About: Persona bio/contact + Person JSON-LD
+- `/blog` — Blog index (5 Placeholder Blog Posts, Tag browse, RSS link)
+- `/blog/[slug]` — Blog Post reader (5 static posts, BlogPosting JSON-LD)
+- `/tags/[tag]` — Tag pages (search-friendly URLs, ItemList JSON-LD)
+- `/dashboard` — Dashboard: 4 Placeholder Metrics with historical trends/charts
+- `/projects` — Projects index (5 Placeholder Projects)
+- `/projects/[slug]` — Project detail (5 static detail pages)
+- `/newsletter` — Newsletter Issues index (4 Placeholder Issues → Substack)
+- `/feed.xml` — RSS 2.0 feed (5 Blog Post items)
+- `/sitemap.xml`, `/robots.txt` — generated from `NEXT_PUBLIC_SITE_URL`
+- 404 — custom `not-found` page
+
+Header/footer navigation is unioned from `src/lib/nav.ts` (Home, Blog, Dashboard,
+Projects, Newsletter, About) — consistent on every route. Theme: light/dark via
+next-themes with an inline flash-free script in `src/app/layout.tsx`.
+
+## Setup (verified for the integration gate)
 
 ### Prerequisites
 
@@ -24,8 +44,9 @@ pnpm install
 cp .env.example .env.local
 ```
 
-`NEXT_PUBLIC_SITE_URL` drives canonical URLs (default `http://localhost:3000`).
-Edit `.env.local` before metadata/sitemap work. No secrets required.
+`NEXT_PUBLIC_SITE_URL` drives canonical URLs, sitemap, RSS, and metadata
+(default `http://localhost:3000`). Edit `.env.local` before metadata/sitemap
+work. No secrets required — everything else is static Placeholder content.
 
 ### Development
 
@@ -33,23 +54,20 @@ Edit `.env.local` before metadata/sitemap work. No secrets required.
 pnpm dev          # http://localhost:3000
 ```
 
-### Test
+### Test (all four — integration gate checklist)
 
 ```bash
-pnpm test         # Vitest unit — content seam + site config
-pnpm test:e2e     # Playwright smoke — Home/About/404, drawer, theme
+pnpm test         # Vitest unit — content seam + site config + integration gates (65 tests)
+pnpm test:e2e     # Playwright — per-slice smoke + whole-site integration (Home→Blog→Post→Dashboard→Projects→Newsletter→Substack)
 pnpm typecheck    # tsc --noEmit
+pnpm build        # Next production build — all 31 static routes must generate
+pnpm start        # serve the production build (http://localhost:3000)
 ```
 
-### Production build
-
-```bash
-pnpm build
-pnpm start
-```
-
-Deploy to Vercel (ADR-0004): import the repo, set `NEXT_PUBLIC_SITE_URL` to the
-production URL, build with `pnpm build` (Next auto-detects). No backend env needed.
+Integration gates enforced by `tests/unit/integration.test.ts` (volumes 5/4/5/4,
+nav union, sitemap/RSS completeness) and `tests/e2e/integration.spec.ts`
+(all routes load with no console errors, SEO tags on every route, sitemap/RSS
+complete, full journey works).
 
 ### Content scaffolding
 
@@ -57,19 +75,67 @@ production URL, build with `pnpm build` (Next auto-detects). No backend env need
 - Metrics: `src/data/metrics.json`
 - Projects: `src/data/projects.json`
 - Newsletter Issues: `src/data/newsletter.json`
-- Schemas + loaders: `src/lib/content.ts` (Zod, validated by `pnpm test`)
+- Schemas + loaders: Blog in `src/lib/content.ts`, Metrics in `src/lib/metrics.ts`, Projects in `src/lib/projects.ts`, Newsletter in `src/lib/newsletter.ts` (Zod, validated by `pnpm test`; `content.ts` re-exports the focused modules for backward compatibility)
 
 Replace Placeholder content with real Blog Posts, Metrics, Projects, and Newsletter
 Issues via these files — no component changes needed.
 
-### Deployed routes (this slice)
+### Blog content format (supported Markdown only)
 
-- `/` — Home with Placeholder Persona
-- `/about` — About with Persona bio/contact
-- 404 — custom `not-found` page
-- Theme: light/dark via next-themes, inline flash-free script in `src/app/layout.tsx`
+The `.mdx` files are authoring containers: frontmatter (title, date, slug,
+tags, summary) plus a Markdown body. Supported: headings, paragraphs, lists,
+GFM tables, and fenced code blocks (```ts etc.) with syntax highlighting
+(`rehype-highlight`). Raw HTML in a post body is escaped to text, never
+rendered as markup.
 
-Blog/Dashboard/Projects/Newsletter routes ship in #3–#6.
+**Not supported (intentional MVP limitation):** MDX components, JSX
+expressions (`{...}`), imports/exports, and other MDX runtime syntax. The
+pipeline is `remark` (no MDX compiler by design — no full MDX compiler in
+MVP scope). If you add components/expressions they will render as text,
+not components. Write posts as plain Markdown + code blocks.
+
+### Newsletter URLs are placeholder (must swap before real use)
+
+Newsletter Issue `url` fields in `src/data/newsletter.json` are placeholder
+`https://example.com/` links (ADR-0002). The UI button therefore says
+“Read ↗” (honest label — no Substack claim over a placeholder URL). Before
+deploying real content, replace each `url` with the real Substack post URL.
+Project `githubUrl`/`demoUrl` placeholders (`https://github.com/`,
+`https://example.com/`) need the same swap.
+
+## Deployment
+
+### Vercel (ADR-0004)
+
+1. Push to GitHub; import the repo in Vercel (Framework: Next.js, no root override).
+2. Build command: `pnpm build` (Next auto-detects; `pnpm install` on install).
+3. Environment: set `NEXT_PUBLIC_SITE_URL` to the production URL
+   (e.g. `https://your-app.vercel.app`, then the is-a.dev URL below). No backend
+   env is needed — no database, auth, or secrets.
+4. Deploy; verify `/`, `/blog`, `/dashboard`, `/projects`, `/newsletter`,
+   `/sitemap.xml`, `/robots.txt`, and `/feed.xml` all return 200 with no
+   console errors (Playwright `pnpm test:e2e` against the preview/prod URL
+   via `PLAYWRIGHT_BASE_URL`).
+
+### is-a.dev subdomain wiring
+
+After the Vercel deployment is live:
+
+1. In Vercel → Project → Settings → Domains, add your `*.is-a.dev` subdomain
+   (e.g. `yourname.is-a.dev`). Disable the automatic `www` redirect for that
+   domain if the register docs require it.
+2. Vercel shows the required DNS records — typically an `A` record pointing to
+   Vercel (e.g. `76.76.21.21`) at the apex of the registered subdomain and a
+   `_vercel` `TXT` record for ownership verification.
+3. Add the `A` + `_vercel` `TXT` records via a PR to `is-a-dev/register`
+   (the is-a.dev registration repo) per its README. Wait for DNS propagation,
+   then confirm Vercel marks the domain verified and the site loads over HTTPS
+   at the subdomain.
+4. Update `NEXT_PUBLIC_SITE_URL` to the final subdomain URL and redeploy so
+   canonicals, sitemap, RSS, and Open Graph point at production.
+
+No code change is needed for the subdomain — `NEXT_PUBLIC_SITE_URL` is
+env-driven (`src/lib/site.ts`).
 
 ------------------------------------------------------------------------
 

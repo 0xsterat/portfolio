@@ -2,12 +2,16 @@ import { site } from "./site";
 
 /**
  * Single source of truth for header/footer navigation.
- * Later slices (#3–#6) append Blog/Dashboard/Projects/Newsletter links here.
+ * Slices #3–#6 each appended their section; About stays last.
  */
 export type NavLink = { label: string; href: string };
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
+  { label: "Blog", href: "/blog" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Projects", href: "/projects" },
+  { label: "Newsletter", href: "/newsletter" },
   { label: "About", href: "/about" },
 ];
 

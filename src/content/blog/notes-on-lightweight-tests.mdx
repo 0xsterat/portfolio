@@ -9,4 +9,17 @@ summary: "Why the first tests live at the content seam — validating data befor
 A small content seam catches most mistakes early: a missing Tag, a malformed Metric,
 or a Project pointing at a dead link fails validation long before a reader sees it.
 
+```ts
+import { describe, it, expect } from "vitest";
+import { parseBlogPost } from "@/lib/content";
+
+describe("content seam", () => {
+  it("rejects a Blog Post missing its Tag", () => {
+    expect(() =>
+      parseBlogPost({ title: "Incomplete", date: "2026-01-01" }),
+    ).toThrow();
+  });
+});
+```
+
 This Blog Post is Placeholder content — swap it for real writing later.

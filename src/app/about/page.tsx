@@ -1,14 +1,30 @@
-import type { Metadata } from "next";
-import { persona } from "@/lib/site";
+import { buildMetadata } from "@/lib/metadata";
+import { getSiteUrl, persona } from "@/lib/site";
 
-export const metadata: Metadata = {
+const description = `About ${persona.name} — ${persona.role}`;
+
+export const metadata = buildMetadata({
   title: "About",
-  description: `About ${persona.name} — ${persona.role}`,
-};
+  description,
+  path: "/about",
+});
 
 export default function AboutPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: persona.name,
+    jobTitle: persona.role,
+    email: `mailto:${persona.email}`,
+    url: `${getSiteUrl()}/about`,
+    description: persona.tagline,
+  };
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <h1 className="text-3xl font-bold tracking-tight">About {persona.name}</h1>
       <p className="mt-4 max-w-prose text-neutral-600 dark:text-neutral-300">
         {persona.name} is a {persona.role}. {persona.tagline}

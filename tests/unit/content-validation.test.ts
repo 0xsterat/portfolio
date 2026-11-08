@@ -100,6 +100,28 @@ describe("content scaffolding validation", () => {
     ).toThrow();
   });
 
+  it("loads exactly 4 Placeholder Newsletter Issues", () => {
+    const issues = validateAllContent().newsletterIssues;
+    expect(issues).toHaveLength(4);
+  });
+
+  it("returns Newsletter Issues sorted by date descending", () => {
+    const issues = validateAllContent().newsletterIssues;
+    const dates = issues.map((i) => new Date(String(i.date)).getTime());
+    const sorted = [...dates].sort((a, b) => b - a);
+    expect(dates).toEqual(sorted);
+  });
+
+  it("gives every Newsletter Issue a title, description, and external Substack URL", () => {
+    const issues = validateAllContent().newsletterIssues;
+    for (const issue of issues) {
+      expect(issue.title.trim().length).toBeGreaterThan(0);
+      expect(issue.description.trim().length).toBeGreaterThan(0);
+      const parsed = new URL(issue.url);
+      expect(["http:", "https:"]).toContain(parsed.protocol);
+    }
+  });
+
   it("returns Blog Posts sorted by date descending", () => {
     const { blogPosts } = validateAllContent();
     const dates = blogPosts.map((p) => new Date(String(p.date)).getTime());

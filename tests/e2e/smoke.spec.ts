@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { watchConsole } from "./helpers";
 
 test.describe("smoke — layout/theme (issue #2)", () => {
   test("Home shows Placeholder Persona with consistent header/footer", async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
-    });
-    page.on("pageerror", (err) => errors.push(String(err)));
+    const errors = watchConsole(page);
 
     await page.goto("/");
     await expect(page).toHaveTitle(/Placeholder/);
