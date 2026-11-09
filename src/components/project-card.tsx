@@ -5,7 +5,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       data-testid="project-card"
-      className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+      className="flex flex-col overflow-hidden rounded-[12px] border border-[#E5E7EB] bg-white dark:border-[#1F2937] dark:bg-[#030711]"
     >
       {project.image ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -18,7 +18,7 @@ export function ProjectCard({ project }: { project: Project }) {
       ) : (
         <div
           aria-hidden="true"
-          className="flex aspect-[16/9] w-full items-center justify-center bg-gradient-to-br from-teal-500/20 to-purple-500/20 text-4xl font-bold tracking-tight text-neutral-400"
+          className="flex aspect-[16/9] w-full items-center justify-center bg-[#F3F4F6] text-4xl font-bold tracking-[-0.025em] text-[#6B7280] dark:bg-[#1F2937] dark:text-[#9CA3B0]"
         >
           {project.title.charAt(0)}
         </div>

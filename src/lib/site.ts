@@ -13,21 +13,23 @@ export function getSiteUrl(): string {
 }
 
 export const persona = {
-  name: "Placeholder Persona",
-  role: "Software Engineer",
+  name: "Atharva Tayade",
+  role: "Devops Engineer",
+  org: "Accenture",
   tagline:
-    "Building and writing about the web. This is a Placeholder Persona shown on Home and About until real content replaces it.",
-  email: "hello@example.com",
-  location: "Remote",
+    "Building and writing about Cloud, Infra and AIops  ",
+  image: "/avatar.jpg",
+  email: "atharvatayadeint@gmail.com",
+  location: "Pune",
   links: [
-    { label: "GitHub", href: "https://github.com/" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/" },
-    { label: "X", href: "https://x.com/" },
+    { label: "GitHub", href: "https://github.com/0xsterat" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/itzatharva" },
+    { label: "X", href: "https://x.com/atharvatayade5" },
   ],
 } as const;
 
 export const site = {
-  name: "Placeholder Portfolio",
+  name: "Atharva's Portfolio",
   description:
-    "A static-first personal portfolio with Blog Posts, a Metrics Dashboard, Projects, and Newsletter Issues.",
+    "A personal portfolio with Blog Posts, a Metrics Dashboard, Projects, and Daily logs.",
 };

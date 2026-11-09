@@ -36,13 +36,13 @@ describe("buildMetadata", () => {
       path: "/blog/a-post",
       type: "article",
       publishedTime: "2026-10-24",
-      authors: ["Placeholder Persona"],
+      authors: ["Atharva Tayade"],
       tags: ["web"],
     });
     expect(meta.openGraph).toMatchObject({
       type: "article",
       publishedTime: "2026-10-24",
-      authors: ["Placeholder Persona"],
+      authors: ["Atharva Tayade"],
       tags: ["web"],
     });
   });

@@ -4,20 +4,20 @@ import { persona, site } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 dark:border-neutral-800">
-      <div className="mx-auto grid max-w-3xl gap-8 px-4 py-10 text-sm md:grid-cols-3">
+    <footer className="border-t border-[#E5E7EB] dark:border-[#1F2937]">
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 py-8 text-sm sm:px-6 md:grid-cols-3">
         <div>
-          <p className="font-semibold text-neutral-900 dark:text-neutral-50">{WORDMARK}</p>
-          <p className="mt-2 text-neutral-600 dark:text-neutral-400">{site.description}</p>
+          <p className="font-semibold leading-none text-[#030711] dark:text-[#E1E7EF]">{WORDMARK}</p>
+          <p className="mt-2 leading-[1.43] text-[#6B7280] dark:text-[#9CA3B0]">{site.description}</p>
         </div>
         <nav aria-label="Footer">
-          <p className="font-medium text-neutral-900 dark:text-neutral-50">Site</p>
-          <ul className="mt-2 flex flex-col gap-1">
+          <p className="text-sm font-semibold text-[#030711] dark:text-[#E1E7EF]">Site</p>
+          <ul className="mt-2 flex flex-col gap-2">
             {FOOTER_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-neutral-600 hover:text-accent dark:text-neutral-400"
+                  className="text-sm leading-[1.43] text-[#6B7280] transition-[color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-[#030711] dark:text-[#9CA3B0] dark:hover:text-[#E1E7EF]"
                 >
                   {link.label}
                 </Link>
@@ -26,13 +26,13 @@ export function Footer() {
           </ul>
         </nav>
         <div>
-          <p className="font-medium text-neutral-900 dark:text-neutral-50">Elsewhere</p>
-          <ul className="mt-2 flex flex-col gap-1">
+          <p className="text-sm font-semibold text-[#030711] dark:text-[#E1E7EF]">Elsewhere</p>
+          <ul className="mt-2 flex flex-col gap-2">
             {persona.links.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="text-neutral-600 hover:text-accent dark:text-neutral-400"
+                  className="text-sm leading-[1.43] text-[#6B7280] transition-[color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-[#030711] dark:text-[#9CA3B0] dark:hover:text-[#E1E7EF]"
                   {...(link.href.startsWith("http")
                     ? { target: "_blank", rel: "noreferrer" }
                     : {})}
@@ -44,8 +44,8 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-neutral-200 py-4 text-center text-xs text-neutral-500 dark:border-neutral-800">
-        © {new Date().getFullYear()} {persona.name} · Placeholder content
+      <div className="border-t border-[#E5E7EB] py-4 text-center text-xs leading-[1.43] text-[#6B7280] dark:border-[#1F2937] dark:text-[#9CA3B0]">
+        © {new Date().getFullYear()} {persona.name}
       </div>
     </footer>
   );

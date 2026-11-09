@@ -7,7 +7,7 @@ import { watchConsole } from "./helpers";
  * work together: all routes load with no critical console errors, SEO metadata /
  * sitemap / RSS are complete on every route, and the full journey
  * Home → Blog → Post → Dashboard → Projects → Newsletter → Substack works.
- * Vocabulary follows GLOSSARY.md. All content is Placeholder.
+ * Vocabulary follows GLOSSARY.md.
  */
 
 const ROUTES = [
@@ -80,8 +80,8 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
     const errors = watchConsole(page);
 
     await page.goto("/");
-    await expect(page).toHaveTitle(/Placeholder/);
-    await expect(page.getByText("Placeholder Persona").first()).toBeVisible();
+    await expect(page).toHaveTitle(/Atharva Tayade/);
+    await expect(page.getByText("Atharva Tayade").first()).toBeVisible();
 
     // Home must not contain stale "coming in" copy — all sections are live.
     await expect(page.getByText(/coming in #/i)).toHaveCount(0);

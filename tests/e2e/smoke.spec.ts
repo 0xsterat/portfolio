@@ -2,14 +2,14 @@ import { test, expect } from "@playwright/test";
 import { watchConsole } from "./helpers";
 
 test.describe("smoke — layout/theme (issue #2)", () => {
-  test("Home shows Placeholder Persona with consistent header/footer", async ({
+  test("Home shows Atharva Tayade with consistent header/footer", async ({
     page,
   }) => {
     const errors = watchConsole(page);
 
     await page.goto("/");
-    await expect(page).toHaveTitle(/Placeholder/);
-    await expect(page.getByText("Placeholder Persona").first()).toBeVisible();
+    await expect(page).toHaveTitle(/Atharva Tayade/);
+    await expect(page.getByText("Atharva Tayade").first()).toBeVisible();
     await expect(page.getByRole("banner")).toBeVisible();
     await expect(page.getByRole("contentinfo")).toBeVisible();
     const navVisible = await page

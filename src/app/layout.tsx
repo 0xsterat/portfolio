@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 // Inline flash-free theme script (next-themes anti-flicker pattern).
-// It MUST run before first paint so light/dark is correct on load.
+// Dark monochrome per docs/design.md (Near Black #030711); default dark.
 const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.classList.toggle('dark',t==='dark');if(t==='dark'){document.documentElement.style.colorScheme='dark'}else{document.documentElement.style.colorScheme='light'}}else{document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark'}}catch(e){document.documentElement.classList.add('dark')}})();`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -40,11 +40,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+      <body className="bg-white font-sans text-[#030711] antialiased dark:bg-[#030711] dark:text-[#E1E7EF]">
         <ThemeProvider>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">{children}</main>
+            <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

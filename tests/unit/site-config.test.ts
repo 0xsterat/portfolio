@@ -8,10 +8,10 @@ describe("site config", () => {
     expect(() => new URL(getSiteUrl())).not.toThrow();
   });
 
-  it("defines a Placeholder Persona with name and role", () => {
+  it("defines a Persona with name and role", () => {
     expect(persona.name).toBeTruthy();
     expect(persona.role).toBeTruthy();
-    expect(persona.name).toContain("Placeholder");
+    expect(persona.name).toBe("Atharva Tayade");
   });
 
   it("exposes navigation links for Home and About", () => {
