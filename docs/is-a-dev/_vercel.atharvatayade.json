@@ -1,9 +1,0 @@
-{
-  "owner": {
-    "username": "0xsterat",
-    "email": "TODO-replace-with-real-email@example.com"
-  },
-  "records": {
-    "TXT": "REPLACE_WITH_VERCEL_TXT_VERIFICATION_STRING_FROM_DASHBOARD"
-  }
-}
