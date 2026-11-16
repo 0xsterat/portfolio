@@ -18,9 +18,9 @@ import { getSiteUrl } from "@/lib/site";
  * Vocabulary follows GLOSSARY.md.
  */
 describe("integration gate — content volumes (ticket #7)", () => {
-  it("loads 7 Blog Posts sorted most-recent first", () => {
+  it("loads 6 Blog Posts sorted most-recent first", () => {
     const posts = loadBlogPosts();
-    expect(posts).toHaveLength(7);
+    expect(posts).toHaveLength(6);
     const dates = posts.map((p) => new Date(String(p.date)).getTime());
     const sorted = [...dates].sort((a, b) => b - a);
     expect(dates).toEqual(sorted);
@@ -96,11 +96,11 @@ describe("integration gate — sitemap completeness (ticket #7)", () => {
     }
   });
 
-  it("includes all 7 Blog Post entries and all 5 Project entries", () => {
+  it("includes all 6 Blog Post entries and all 5 Project entries", () => {
     const urls = sitemap().map((e) => e.url);
     const blogInSitemap = urls.filter((u) => u.includes("/blog/"));
     const projectInSitemap = urls.filter((u) => u.includes("/projects/"));
-    expect(blogInSitemap).toHaveLength(7);
+    expect(blogInSitemap).toHaveLength(6);
     expect(projectInSitemap).toHaveLength(5);
   });
 });
@@ -111,7 +111,7 @@ describe("integration gate — RSS completeness (ticket #7)", () => {
     const xml = buildRssFeed(posts, getSiteUrl());
     expect(xml).toContain("<?xml version=\"1.0\"");
     expect(xml).toContain("<rss");
-    expect((xml.match(/<item>/g) ?? []).length).toBe(7);
+    expect((xml.match(/<item>/g) ?? []).length).toBe(6);
     for (const post of posts) {
       expect(xml).toContain(`/blog/${post.slug}`);
       expect(xml).toContain(post.title);

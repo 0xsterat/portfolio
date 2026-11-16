@@ -21,17 +21,17 @@ test.describe("Blog slice", () => {
     await expect(page.getByRole("contentinfo")).toBeVisible();
 
     const cards = page.getByTestId("blog-card");
-    await expect(cards).toHaveCount(7);
+    await expect(cards).toHaveCount(6);
     // Most recent first.
     await expect(cards.first()).toContainText(
-      "Hosting a static site on Amazon S3",
+      "Why your S3 static site returns 403",
     );
     await expect(cards.last()).toContainText("Theming without flash");
     // Each card shows date, reading time, and summary.
     await expect(cards.first()).toContainText("November 16, 2026");
     await expect(cards.first()).toContainText(/min read/);
     await expect(cards.first()).toContainText(
-      "A hands-on walkthrough of hosting a static site on S3",
+      "A DevOps engineer's notes on the Configure an Amazon S3 bucket lab",
     );
     // Tag pills link to search-friendly Tag pages.
     await expect(
@@ -84,7 +84,7 @@ test.describe("Blog slice", () => {
     ).toBeVisible();
     await page.getByTestId("back-to-blog").click();
     await expect(page).toHaveURL(/\/blog$/);
-    await expect(page.getByTestId("blog-card")).toHaveCount(7);
+    await expect(page.getByTestId("blog-card")).toHaveCount(6);
   });
 
   test("Tag page lists only Blog Posts with that Tag", async ({ page }) => {
@@ -120,7 +120,7 @@ test.describe("Blog slice", () => {
     expect(feedBody).toContain("Getting started with static content");
     expect(feedBody).toContain("/blog/getting-started-with-static-content");
     expect(feedBody).toContain("<pubDate>");
-    expect((feedBody.match(/<item>/g) ?? []).length).toBe(7);
+    expect((feedBody.match(/<item>/g) ?? []).length).toBe(6);
 
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.status()).toBe(200);
@@ -146,6 +146,6 @@ test.describe("Blog slice", () => {
     await expect(blogLinks.first()).toBeVisible();
     await blogLinks.first().click();
     await expect(page).toHaveURL(/\/blog$/);
-    await expect(page.getByTestId("blog-card")).toHaveCount(7);
+    await expect(page.getByTestId("blog-card")).toHaveCount(6);
   });
 });

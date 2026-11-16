@@ -14,9 +14,9 @@ import {
  * Placeholder content — the real files in src/content/blog.
  */
 describe("Blog Post and Tag loading", () => {
-  it("loads 7 Blog Posts", () => {
+  it("loads 6 Blog Posts", () => {
     const posts = loadBlogPosts();
-    expect(posts).toHaveLength(7);
+    expect(posts).toHaveLength(6);
   });
 
   it("returns Blog Posts sorted by date descending (most recent first)", () => {
@@ -24,8 +24,8 @@ describe("Blog Post and Tag loading", () => {
     const dates = posts.map((p) => new Date(String(p.date)).getTime());
     const sorted = [...dates].sort((a, b) => b - a);
     expect(dates).toEqual(sorted);
-    // Most recent Blog Post is the November S3 walkthrough.
-    expect(posts[0].slug).toBe("hosting-a-static-site-on-amazon-s3");
+    // Most recent Blog Post is the November S3 403 walkthrough.
+    expect(posts[0].slug).toBe("why-your-s3-static-site-returns-403");
     expect(posts[posts.length - 1].slug).toBe("theming-without-flash");
   });
 
@@ -49,7 +49,6 @@ describe("Blog Post and Tag loading", () => {
       "aws",
       "cloud",
       "dashboard",
-      "devops",
       "metrics",
       "nextjs",
       "s3",
