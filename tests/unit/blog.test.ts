@@ -14,9 +14,9 @@ import {
  * Placeholder content — the real files in src/content/blog.
  */
 describe("Blog Post and Tag loading", () => {
-  it("loads 5 Placeholder Blog Posts", () => {
+  it("loads 7 Blog Posts", () => {
     const posts = loadBlogPosts();
-    expect(posts).toHaveLength(5);
+    expect(posts).toHaveLength(7);
   });
 
   it("returns Blog Posts sorted by date descending (most recent first)", () => {
@@ -24,8 +24,8 @@ describe("Blog Post and Tag loading", () => {
     const dates = posts.map((p) => new Date(String(p.date)).getTime());
     const sorted = [...dates].sort((a, b) => b - a);
     expect(dates).toEqual(sorted);
-    // Most recent Placeholder Blog Post is the October static-content note.
-    expect(posts[0].slug).toBe("getting-started-with-static-content");
+    // Most recent Blog Post is the November S3 walkthrough.
+    expect(posts[0].slug).toBe("hosting-a-static-site-on-amazon-s3");
     expect(posts[posts.length - 1].slug).toBe("theming-without-flash");
   });
 
@@ -46,9 +46,14 @@ describe("Blog Post and Tag loading", () => {
     const tags = getAllTags();
     expect(tags).toEqual([
       "accessibility",
+      "aws",
+      "cloud",
       "dashboard",
+      "devops",
       "metrics",
       "nextjs",
+      "s3",
+      "security",
       "static-sites",
       "testing",
       "theming",

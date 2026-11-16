@@ -207,6 +207,43 @@ body {
   color: #9ca3b0;
 }
 
+/* GFM tables (remark-gfm) — bordered, aligned, and scrollable on narrow screens. */
+.blog-prose table {
+  display: block;
+  width: 100%;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.dark .blog-prose table {
+  border-color: #1f2937;
+}
+.blog-prose th,
+.blog-prose td {
+  padding: 0.6em 0.9em;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #e5e7eb;
+}
+.dark .blog-prose th,
+.dark .blog-prose td {
+  border-bottom-color: #1f2937;
+}
+.blog-prose th {
+  font-weight: 600;
+  white-space: nowrap;
+  background-color: #f9fafb;
+}
+.dark .blog-prose th {
+  background-color: rgb(225 231 239 / 0.06);
+}
+.blog-prose tr:last-child td {
+  border-bottom: none;
+}
+
 /* rehype-highlight (highlight.js) token colors, light + dark. */
 .blog-prose .hljs-keyword,
 .blog-prose .hljs-selector-tag,

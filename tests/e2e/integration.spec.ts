@@ -90,7 +90,7 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
     const recent = page.getByTestId("home-recent-post");
     await expect(recent).toHaveCount(5);
     await expect(recent.first()).toContainText(
-      "Getting started with static content",
+      "Hosting a static site on Amazon S3",
     );
     await expect(recent.last()).toContainText("Theming without flash");
     // Each recent post links to its own Blog Post URL.
@@ -156,15 +156,15 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
     await page.goto("/");
     await page.getByTestId("home-section-blog").click();
     await expect(page).toHaveURL(/\/blog$/);
-    await expect(page.getByTestId("blog-card")).toHaveCount(5);
+    await expect(page.getByTestId("blog-card")).toHaveCount(7);
 
     // Blog → Blog Post
     await page
       .getByTestId("blog-card")
       .first()
-      .getByRole("link", { name: /Getting started/ })
+      .getByRole("link", { name: /Hosting a static site/ })
       .click();
-    await expect(page).toHaveURL(/\/blog\/getting-started-with-static-content/);
+    await expect(page).toHaveURL(/\/blog\/hosting-a-static-site-on-amazon-s3/);
     await expect(page.getByTestId("blog-body")).toBeVisible();
 
     // → Dashboard (via header nav)
@@ -243,7 +243,7 @@ test.describe("integration gate — whole-site smoke (issue #7)", () => {
     expect(feed.status()).toBe(200);
     expect(feed.headers()["content-type"]).toContain("application/rss+xml");
     const feedBody = await feed.text();
-    expect((feedBody.match(/<item>/g) ?? []).length).toBe(5);
+    expect((feedBody.match(/<item>/g) ?? []).length).toBe(7);
     expect(feedBody).toContain("/blog/getting-started-with-static-content");
   });
 });

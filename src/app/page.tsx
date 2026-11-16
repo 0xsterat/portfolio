@@ -37,7 +37,7 @@ export default function HomePage() {
       <section className="grid items-center gap-6 py-8 md:grid-cols-[1fr_280px] md:py-12 lg:grid-cols-[1fr_320px] lg:gap-6">
         {/* LEFT: text */}
         <div className="stagger-item" style={{ animationDelay: "0ms" }}>
-          <h1 className="mt-4 text-[2.5rem] font-bold leading-none tracking-[-0.025em] text-[#DC9F7B] dark:text-[#DC9F7B] md:text-[3rem]">
+          <h1 className="mt-4 text-[2.5rem] font-bold leading-none tracking-[-0.025em] text-[#A85C30] dark:text-[#DC9F7B] md:text-[3rem]">
             {persona.name}
           </h1>
           <p className="text-sm font-medium leading-[1.43] tracking-wide text-[#6B7280] dark:text-[#9CA3B0]">
@@ -50,7 +50,7 @@ export default function HomePage() {
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <a
               href={`mailto:${persona.email}`}
-              className="pressable hover-lift inline-flex h-10 items-center rounded-full bg-[#F5E3C7] px-5 text-base font-semibold leading-none text-white dark:bg-[#F5E3C7] dark:text-black"
+              className="pressable hover-lift inline-flex h-10 items-center rounded-full bg-[#F5E3C7] px-5 text-base font-semibold leading-none text-[#030711] dark:bg-[#F5E3C7] dark:text-black"
             >
               Contact
             </a>
